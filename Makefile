@@ -1,7 +1,7 @@
 CC := g++
 CFLAGS := -Wall -Wextra -Wpedantic -g -Isrc -I$(dir $(abspath $(lastword $(MAKEFILE_LIST)))) $(shell find src -type d -printf '-I%p ')
 BUILD_DIR := build
-EXECUTABLE := $(BUILD_DIR)/TextBlender
+EXECUTABLE := $(BUILD_DIR)/perfectloop
 
 SOURCES := $(shell find src -name '*.cpp')
 OBJECTS := $(patsubst src/%,$(BUILD_DIR)/%,$(SOURCES:.cpp=.o))
