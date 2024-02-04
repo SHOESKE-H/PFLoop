@@ -1,14 +1,14 @@
-# Perfect-Loop
+# PFLoop
 
 ## About
 
-This little project is meant to be used to fix broken video loops.
+PFLoop (P is silent) is meant to be used to fix loops on videos (wallpapers, animations, etc.).
 
 ## Building
 
 To build the project, run `make` in the root directory.
 
-The built executable can then be found at `build/perfectloop`
+The built executable can then be found at `build/pfloop`
 
 ## License
 
