@@ -37,11 +37,11 @@ int main(int argc, const char** argv) {
         Arguments args(argc, argv);
     
         log("Arguments: ");
-        log("\tHelp?: " + std::to_string(args.arg(Arguments::Type::Help).state == Arguments::State::Existant));
+        log("\tHelp?: " + std::to_string(args.arg(Arguments::Type::Help).state == Arguments::State::Existent));
         log("\tInput file: " + args.arg(Arguments::Type::InputFile).value);
         log("\tOutput file: " + args.arg(Arguments::Type::OutputFile).value);
 
-        if (args.arg(Arguments::Type::Help).state == Arguments::State::Existant)
+        if (args.arg(Arguments::Type::Help).state == Arguments::State::Existent)
             usage(true);
         
         // Do stuff with acquired arguments

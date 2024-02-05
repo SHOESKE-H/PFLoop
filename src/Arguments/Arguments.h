@@ -24,7 +24,7 @@ public:
     typedef enum
     {
         Nonexistant,
-        Existant
+        Existent
     } State;
 
     typedef enum
@@ -49,7 +49,7 @@ public:
     {
         Arg argument;
         argument.type = t_argument;
-        argument.state = (State) (m_argv.count(t_argument) == State::Existant);
+        argument.state = (State) (m_argv.count(t_argument) == State::Existent);
 
         if (argument.state == State::Nonexistant)
             return argument;
