@@ -92,7 +92,7 @@ private:
         {
             size_t fileExtensionLoc = map.at(Type::InputFile).find_last_of('.');
             std::string outputFile = "";
-            if (fileExtensionLoc != std::string::npos)
+            if (fileExtensionLoc != std::string::npos && fileExtensionLoc != map.at(Type::InputFile).size() - 1)
             {
                 std::string outputFile(map.at(Type::InputFile).substr(0, fileExtensionLoc) +
                         m_defaultOutputFileNameAppendix +
