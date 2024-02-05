@@ -37,19 +37,14 @@ int main(int argc, const char** argv) {
         Arguments args(argc, argv);
     
         log("Arguments: ");
-        std::string tmp;
-        bool btmp;
-        btmp = args.arg(Arguments::Arg::Help, tmp);
-        log("\tHelp?: " + std::to_string(btmp == Arguments::State::Exists));
-        args.arg(Arguments::Arg::InputFile, tmp);
-        log("\tInput file: " + tmp);
-        args.arg(Arguments::Arg::OutputFile, tmp);
-        log("\tOutput file: " + tmp);
-    
-        if (args.arg(Arguments::Arg::Help) == Arguments::State::Exists)
-            usage(true);
+        log("\tHelp?: " + std::to_string(args.arg(Arguments::Type::Help).state == Arguments::State::Existant));
+        log("\tInput file: " + args.arg(Arguments::Type::InputFile).value);
+        log("\tOutput file: " + args.arg(Arguments::Type::OutputFile).value);
 
-        // Do stuff with acquiered arguments
+        if (args.arg(Arguments::Type::Help).state == Arguments::State::Existant)
+            usage(true);
+        
+        // Do stuff with acquired arguments
         // ...
     } catch (std::exception& e) {
         std::cerr << "Exception thrown: " << e.what() << std::endl;

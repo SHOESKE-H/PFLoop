@@ -23,48 +23,58 @@ public:
 
     typedef enum
     {
-        Unknown,
-        Exists
+        Nonexistant,
+        Existant
     } State;
 
     typedef enum
     {
+        Unknown,
         Help,
         InputFile,
         OutputFile
-    } Arg;
-
-    State arg(const Arg& t_argument, std::string& t_des) const noexcept
+    } Type;
+    
+    struct Arg
     {
-        if (!m_argv.count(t_argument))
-            return State::Unknown;
+        Arg()
+            : type(Type::Unknown), state(State::Nonexistant), value() {}
 
-        t_des = m_argv.at(t_argument);
+        Type type;
+        State state;
+        std::string value;
+    };
 
-        return State::Exists;
-    }
-
-    State arg(const Arg& t_argument) const noexcept
+    Arg arg(const Type& t_argument) const noexcept
     {
-        return static_cast<State>(m_argv.count(t_argument));
+        Arg argument;
+        argument.type = t_argument;
+        argument.state = (State) (m_argv.count(t_argument) == State::Existant);
+
+        if (argument.state == State::Nonexistant)
+            return argument;
+        else
+            argument.value = m_argv.at(t_argument);
+
+        return argument;
     }
 
 private:
     static constexpr char m_defaultOutputFileNameAppendix[] = "-perfect-loop";
 
-    static std::unordered_map<Arg, std::string> parse(const int& t_argc, const char** t_argv)
+    static std::unordered_map<Type, std::string> parse(const int& t_argc, const char** t_argv)
     {
-        std::unordered_map<Arg, std::string> map;
+        std::unordered_map<Type, std::string> map;
         map.reserve(t_argc);
 
-        const std::unordered_map<std::string, std::pair<bool, Arg>> args =
+        const std::unordered_map<std::string, std::pair<bool, Type>> args =
         {
-            {"--help", {false, Arg::Help}},
-            {"-H", {false, Arg::Help}},
-            {"--input", {true, Arg::InputFile}},
-            {"-i", {true, Arg::InputFile}},
-            {"--output", {true, Arg::OutputFile}},
-            {"-o", {true, Arg::OutputFile}}
+            {"--help", {false, Type::Help}},
+            {"-H", {false, Type::Help}},
+            {"--input", {true, Type::InputFile}},
+            {"-i", {true, Type::InputFile}},
+            {"--output", {true, Type::OutputFile}},
+            {"-o", {true, Type::OutputFile}}
         };
         
         // Parse the arguments
@@ -78,16 +88,16 @@ private:
         }
 
         // Init missing args with defaults
-        if (map.count(Arg::InputFile) && !map.count(Arg::OutputFile))
+        if (map.count(Type::InputFile) && !map.count(Type::OutputFile))
         {
-            size_t fileExtensionLoc = map.at(Arg::InputFile).find_last_of('.');
+            size_t fileExtensionLoc = map.at(Type::InputFile).find_last_of('.');
             std::string outputFile = "";
             if (fileExtensionLoc != std::string::npos)
             {
-                std::string outputFile(map.at(Arg::InputFile).substr(0, fileExtensionLoc) +
+                std::string outputFile(map.at(Type::InputFile).substr(0, fileExtensionLoc) +
                         m_defaultOutputFileNameAppendix +
-                        map.at(Arg::InputFile).substr(fileExtensionLoc));
-                map.insert({Arg::OutputFile, outputFile});
+                        map.at(Type::InputFile).substr(fileExtensionLoc));
+                map.insert({Type::OutputFile, outputFile});
             } else {
                 throw BadInputFileException("Input file does not have a file extension.");
             }
@@ -96,7 +106,7 @@ private:
         return map;
     }
 
-    std::unordered_map<Arg, std::string> m_argv;
+    std::unordered_map<Type, std::string> m_argv;
 };
 
 #endif // ARGUMENTS_H
