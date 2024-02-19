@@ -3,6 +3,8 @@
 #include <iostream>
 #include <cstring>
 #include <src/Arguments/Arguments.h>
+#include <src/Video/VideoReader.h>
+#include <src/Video/Frame.h>
 
 inline void log([[maybe_unused]] const std::string& t_logMsg)
 {
@@ -40,9 +42,9 @@ int main(int argc, const char** argv)
         if (args.arg(Arguments::Type::Help).m_state == Arguments::State::Existent)
             usage();
         
-        // Do stuff with acquired arguments
-        // ...
-
+        VideoReader vReader(args.arg(Arguments::Type::InputFile).m_value);
+        std::vector<Frame> frames = vReader.extractFrames();
+        std::cout << "Number of frames of input file \"" << args.arg(Arguments::Type::InputFile).m_value << "\": " << frames.size() << '\n';
     } catch (const std::exception& e) {
         std::cerr << "Exception thrown: " << e.what() << std::endl;
     }
