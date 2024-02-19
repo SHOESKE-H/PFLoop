@@ -6,7 +6,7 @@
 #include <stdexcept>
 #include <utility>
 #include <unordered_map>
-#include <src/Arguments/BadInputFileException.h>
+#include <src/Arguments/BadFileException.h>
 #include <src/Arguments/ExpectedArgumentException.h>
 
 class Arguments
@@ -89,18 +89,30 @@ private:
         }
 
         // Init missing args with defaults
+        size_t fileExtensionLocInputFile = 0;
+        size_t fileExtensionLocOutputFile = 0;
+        if (map.count(Type::InputFile))
+            fileExtensionLocInputFile = map.at(Type::InputFile).find_last_of('.');
+
         if (map.count(Type::InputFile) && !map.count(Type::OutputFile)) {
-            size_t fileExtensionLoc = map.at(Type::InputFile).find_last_of('.');
             std::string outputFile = "";
-            if (fileExtensionLoc != std::string::npos && fileExtensionLoc != map.at(Type::InputFile).size() - 1) {
-                std::string outputFile(map.at(Type::InputFile).substr(0, fileExtensionLoc) +
+            if (fileExtensionLocInputFile != std::string::npos && fileExtensionLocInputFile != map.at(Type::InputFile).size() - 1) {
+                std::string outputFile(map.at(Type::InputFile).substr(0, fileExtensionLocInputFile) +
                         m_defaultOutputFileNameAppendix +
-                        map.at(Type::InputFile).substr(fileExtensionLoc));
+                        map.at(Type::InputFile).substr(fileExtensionLocInputFile));
                 map.insert({Type::OutputFile, outputFile});
             } else {
-                throw BadInputFileException("Input file does not have a file extension.");
+                throw BadFileException("Input file does not have a file extension.");
             }
         }
+        
+        // Check final args
+        if (map.count(Type::OutputFile))
+            fileExtensionLocOutputFile = map.at(Type::OutputFile).find_last_of('.');
+        if (map.count(Type::InputFile) && (fileExtensionLocInputFile == std::string::npos || fileExtensionLocInputFile == map.at(Type::InputFile).size() - 1))
+            throw BadFileException("Input file does not have a file extension.");
+        if (map.count(Type::OutputFile) && (fileExtensionLocOutputFile == std::string::npos || fileExtensionLocOutputFile == map.at(Type::OutputFile).size() - 1))
+            throw BadFileException("Output file does not have a file extension.");
 
         return map;
     }
