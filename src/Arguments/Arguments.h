@@ -1,22 +1,23 @@
-#ifndef ARGUMENTS_H
-#define ARGUMENTS_H
+#ifndef PFLOOP_SRC_ARGUMENTS_ARGUMENTS_H
+#define PFLOOP_SRC_ARGUMENTS_ARGUMENTS_H
 
 #include <vector>
 #include <string>
 #include <stdexcept>
 #include <utility>
 #include <unordered_map>
-#include "src/Arguments/BadInputFileException.h"
+#include <src/Arguments/BadInputFileException.h>
+#include <src/Arguments/ExpectedArgumentException.h>
 
 class Arguments
 {
 public:
-    Arguments() noexcept
+    Arguments(void) noexcept
         : m_argv{} {}
     Arguments(const int& t_argc, const char** t_argv) noexcept
         : m_argv(parse(t_argc, t_argv)) {}
 
-    int count() const noexcept
+    size_t count(void) const noexcept
     {
         return m_argv.size();
     }
@@ -37,24 +38,25 @@ public:
     
     struct Arg
     {
-        Arg()
-            : type(Type::Unknown), state(State::Nonexistant), value() {}
+        public:
+            Arg(void)
+                : m_type(Type::Unknown), m_state(State::Nonexistant), m_value() {}
 
-        Type type;
-        State state;
-        std::string value;
+            Type m_type;
+            State m_state;
+            std::string m_value;
     };
 
     Arg arg(const Type& t_argument) const noexcept
     {
         Arg argument;
-        argument.type = t_argument;
-        argument.state = (State) (m_argv.count(t_argument) == State::Existent);
+        argument.m_type = t_argument;
+        argument.m_state = (State) (m_argv.count(t_argument) == State::Existent);
 
-        if (argument.state == State::Nonexistant)
+        if (argument.m_state == State::Nonexistant)
             return argument;
         else
-            argument.value = m_argv.at(t_argument);
+            argument.m_value = m_argv.at(t_argument);
 
         return argument;
     }
@@ -78,22 +80,19 @@ private:
         };
         
         // Parse the arguments
-        for (int i = 0; i < t_argc; i++)
-        {
-            std::string iStr(t_argv[i]);
-            if (args.count(iStr))
-            {
-                map.insert(std::make_pair(args.at(iStr).second, args.at(iStr).first ? t_argv[++i] : ""));
+        for (int i = 0; i < t_argc; i++) {
+            if (args.count(t_argv[i])) {
+                if (args.at(t_argv[i]).first && i >= t_argc - 1)
+                    throw ExpectedArgumentException("Argument value expected, but reached end of argument list.");
+                map.insert(std::make_pair(args.at(t_argv[i]).second, args.at(t_argv[i]).first ? t_argv[i + 1] : ""));
             }
         }
 
         // Init missing args with defaults
-        if (map.count(Type::InputFile) && !map.count(Type::OutputFile))
-        {
+        if (map.count(Type::InputFile) && !map.count(Type::OutputFile)) {
             size_t fileExtensionLoc = map.at(Type::InputFile).find_last_of('.');
             std::string outputFile = "";
-            if (fileExtensionLoc != std::string::npos && fileExtensionLoc != map.at(Type::InputFile).size() - 1)
-            {
+            if (fileExtensionLoc != std::string::npos && fileExtensionLoc != map.at(Type::InputFile).size() - 1) {
                 std::string outputFile(map.at(Type::InputFile).substr(0, fileExtensionLoc) +
                         m_defaultOutputFileNameAppendix +
                         map.at(Type::InputFile).substr(fileExtensionLoc));
@@ -109,4 +108,4 @@ private:
     std::unordered_map<Type, std::string> m_argv;
 };
 
-#endif // ARGUMENTS_H
+#endif // PFLOOP_SRC_ARGUMENTS_ARGUMENTS_H
