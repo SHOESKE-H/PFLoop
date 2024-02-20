@@ -1,12 +1,12 @@
-#ifndef PFLOOP_SRC_VIDEO_VIDEO_READER_H
-#define PFLOOP_SRC_VIDEO_VIDEO_READER_H
+#ifndef PFLOOP_SRC_VIDEO_VIDEO_READER_HPP
+#define PFLOOP_SRC_VIDEO_VIDEO_READER_HPP
 
 #include <opencv2/core.hpp>
 #include <opencv2/video.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/videoio.hpp>
 #include <opencv2/highgui.hpp>
-#include <src/Video/Frame.h>
+#include <src/Video/Frame.hpp>
 #include <vector>
 #include <stdexcept>
 
@@ -40,4 +40,4 @@ private:
     cv::VideoCapture m_videoCap;
 };
 
-#endif // PFLOOP_SRC_VIDEO_VIDEO_READER_H
+#endif // PFLOOP_SRC_VIDEO_VIDEO_READER_HPP

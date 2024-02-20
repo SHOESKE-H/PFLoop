@@ -1,13 +1,13 @@
-#ifndef PFLOOP_SRC_ARGUMENTS_ARGUMENTS_H
-#define PFLOOP_SRC_ARGUMENTS_ARGUMENTS_H
+#ifndef PFLOOP_SRC_ARGUMENTS_ARGUMENTS_HPP
+#define PFLOOP_SRC_ARGUMENTS_ARGUMENTS_HPP
 
 #include <vector>
 #include <string>
 #include <stdexcept>
 #include <utility>
 #include <unordered_map>
-#include <src/Arguments/BadFileException.h>
-#include <src/Arguments/ExpectedArgumentException.h>
+#include <src/Arguments/BadFileException.hpp>
+#include <src/Arguments/ExpectedArgumentException.hpp>
 
 class Arguments
 {
@@ -120,4 +120,4 @@ private:
     std::unordered_map<Type, std::string> m_argv;
 };
 
-#endif // PFLOOP_SRC_ARGUMENTS_ARGUMENTS_H
+#endif // PFLOOP_SRC_ARGUMENTS_ARGUMENTS_HPP

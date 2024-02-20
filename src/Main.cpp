@@ -2,9 +2,9 @@
 
 #include <iostream>
 #include <cstring>
-#include <src/Arguments/Arguments.h>
-#include <src/Video/VideoReader.h>
-#include <src/Video/Frame.h>
+#include <src/Arguments/Arguments.hpp>
+#include <src/Video/VideoReader.hpp>
+#include <src/Video/Frame.hpp>
 
 inline void log([[maybe_unused]] const std::string& t_logMsg)
 {
