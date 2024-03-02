@@ -18,4 +18,4 @@ The built executable can then be found at `build/pfloop`
 
 ## License
 
-Distributed under the MIT License. See [LICENSE](/LICENSE) for more information
+Distributed under GPLv3. See [LICENSE](/LICENSE) for more information
